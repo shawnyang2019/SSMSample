@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--不同的项目有一下内容需要检查更新
+ 1 不同的项目的mapper namespace 也就是映射的Dao.class文件也会不一样
+ 2 不同的项目的parameterType，resultType 中映射的Entity.class文件的地址会不一样
+ 3 不同的项目的数据库的表名、列名、以及属性名，不一样，需要检查更新
+ 4 id名要与Dao.class文件中的方法名完全一样
+ 5 mybatis中有可能会用到别名，这里需要注意是否会用别名替代-->
+
+<mapper namespace="com.yx.ssmsample.dao.StudentDao">
+
+    <select id="queryObject" resultType="com.yx.ssmsample.entity.StudentEntity">
+		select * from student where sno = #{value}
+	</select>
+
+    <insert id="save" parameterType="com.yx.ssmsample.entity.StudentEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into student
+		(
+			`sno`,
+			`sname`,
+			`ssex`,
+			`sage`,
+			`sdept`
+		)
+		values
+		(
+			#{sno},
+			#{sname},
+			#{ssex},
+			#{sage},
+			#{sdept}
+		)
+	</insert>
+
+    <delete id="delete">
+		delete from student where sname = #{value}
+	</delete>
+
+
+</mapper>

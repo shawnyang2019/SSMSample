@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    <!--不同的项目有一下内容需要检查更新
+     1 不同项目的自动扫描和注入的文件夹地址可能会不一样，需要检查更新
+     2 不同项目的JDBC配置文件xml的地址可能会不一样，需要检查更新
+     3 JDBC properties 属性的内容和JDBC文件的要一样
+     4 不同项目的mybatis.xml文件的地址可能会不一样，需要检查更新
+     5 不同项目的Mapper配置文件的所在包名(Dao所在的包名）可能会不一样
+       -->
+
+    <!-- 设置动作启用定时任务 https://blog.csdn.net/q6834850/article/details/72983948 配置教程-->
+    <task:annotation-driven/>
+
+    <!-- 自动扫描、并注入对象，base-package设置在java下面的包名-->
+    <context:component-scan base-package="com.yx.ssmsample"/>
+
+    <!-- 引入jdbc配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!-- 创建jdbc数据源，从jdbc.properties配置而来 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${driverClassName}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="url" value="${url}"/>
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="${initialSize}"></property>
+        <!-- 连接池最大数量 -->
+        <property name="maxActive" value="${maxActive}"></property>
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="${maxIdle}"></property>
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="${minIdle}"></property>
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="${maxWait}"></property>
+    </bean>
+
+    <!-- 配置MyBatis的sqlSession -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 映射Mapper目录 -->
+    <!-- Mapper配置文件的所在包名，Spring会自动查找其下的Mapper配置文件 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yx.ssmsample.dao"/>
+    </bean>
+    <!-- 结束 Mapper配置文件的所在包名，Spring会自动查找其下的Mapper配置文件 -->
+    <!-- 结束 映射Mapper目录 -->
+
+
+    <!-- 事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 结束 事务 -->
+
+</beans>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--不同的项目有一下内容需要检查更新
+ 1 不同的项目的mappers 中Dao.xml文件的映射地址会不一样
+ 2 不同的项目的mappers文件夹映射地址会不一样
+ 2 关注里面的别名使用，会对Dao.xml文件有印象-->
+
+<configuration>
+    <!-- 全局配置 -->
+    <settings>
+        <!--允许 JDBC 支持自动生成主键-->
+        <setting name="useGeneratedKeys" value="false"/>
+        <!--是否开启自动驼峰命名规则（camel case）映射，即从经典数据库列名 A_COLUMN 到经典Java 属性名 aColumn 的类似映射。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <!--给包名取别名,在mapper文件中引用包名时就直接用别名就可了-->
+    <!--<typeAliases>-->
+    <!--&lt;!&ndash;后续测试的类，在这里先创建一下别名，以便后期再创&ndash;&gt;-->
+    <!--<typeAlias type="model.User" alias="User"/>-->
+    <!--</typeAliases>-->
+
+    <!--给文件去别名，这样在Dao的映射文件中就可以用别名代替入参或者出参类型-->
+    <!--<typeAliases>-->
+        <!--<typeAlias alias="user" type="com.fiberhome.entity.User"/>-->
+        <!--<typeAlias alias="employee" type="com.fiberhome.entity.Employee"/>-->
+    <!--</typeAliases>-->
+
+
+    <mappers>
+        <!--直接映射到相应的mapper文件，如果有多个文件，每一个文件都要在这里指定一下-->
+        <mapper resource="studentDao.xml"/>
+        <!--或者也可以扫描包路径下所有xxMapper.xml文件 -->
+        <!--<package name="com.xhm.mapper" />-->
+    </mappers>
+
+</configuration>

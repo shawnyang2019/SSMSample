@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--不同的项目有一下内容需要检查更新
+ 1 不同的项目的logger name中文件夹的映射地址会不一样-->
+<!-- monitorInterval用于指定log4j自动重新配置的监测间隔时间，单位是s,最小是5s -->
+<configuration monitorInterval="60">
+    <!--PatternLayout:输出格式，不设置默认为:%m%n.-->
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- %L 行号 %M 方法名 -->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %p %C{1.} [%t] %m%n"/>
+        </Console>
+    </appenders>
+
+
+    <loggers>
+        <!--name:用来指定该Logger所适用的类或者类所在的包全路径,继承自Root节点.-->
+        <logger name="com.yx.ssmsample" additivity="false" level="trace">
+            <AppenderRef ref="Console"/>
+        </logger>
+
+        <logger name="org.springframework" level="info">
+            <AppenderRef ref="Console"/>
+        </logger>
+
+        <!-- 没有特别规定的包采用此配置
+        level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.
+         AppenderRef：Root的子节点，用来指定该日志输出到哪个Appender.-->
+        <root level="info">
+            <AppenderRef ref="Console"/>
+        </root>
+    </loggers>
+</configuration>
